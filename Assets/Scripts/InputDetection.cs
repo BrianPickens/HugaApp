@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public enum ChoiceType { Question, Photo }
+public enum ChoiceType { Question, Photo, Match }
 
 public class InputDetection : MonoBehaviour, IPointerDownHandler
 {
@@ -23,6 +23,7 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] private PictureManager pictureManager;
     [SerializeField] private Questionnaire questions;
+    [SerializeField] private MatchManager matches;
 
     private ChoiceType currentChoiceType;
 
@@ -48,6 +49,12 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
             questions.UpdateSelectorPosition(0f);
             questions.UpdateAnswerDisplayOpacities(0f, 0f);
         }
+        else if (currentChoiceType == ChoiceType.Match)
+        {
+            matches.UpdatePicturePosition(0f);
+            matches.UpdateHugDisplayOpacities(0f, 0f);
+        }
+
 
     }
 
@@ -87,18 +94,20 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                             {
                                 questions.UpdateSelectorPosition(canvasXPosition - startingXPosition);
                             }
+                            else if (currentChoiceType == ChoiceType.Match)
+                            {
+                                matches.UpdatePicturePosition(canvasXPosition - startingXPosition);
+                            }
 
                             float targetMovementNeeded = 0f;
 
                             targetMovementNeeded = canvasWidth * HorizontalSelectPercentageThreshold;
 
                             float backgroundPercentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
-                            // storyUIController.UpdateChoiceBackgroundOpacities(Mathf.Clamp01(1f - backgroundPercentage));
 
                             if (canvasXPosition > startingXPosition)
                             {
                                 float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
-                                // storyUIController.UpdateRightChoiceOpacity(Mathf.Clamp01(1f - percentage));
                                 if (currentChoiceType == ChoiceType.Photo)
                                 {
                                     pictureManager.UpdateHugDisplayOpacities(0f, percentage);
@@ -107,11 +116,14 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                                 {
                                     questions.UpdateAnswerDisplayOpacities(0f, percentage);
                                 }
+                                else if (currentChoiceType == ChoiceType.Match)
+                                {
+                                    matches.UpdateHugDisplayOpacities(0f, percentage);
+                                }
                             }
                             else if (canvasXPosition < startingXPosition)
                             {
                                 float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
-                                // storyUIController.UpdateLeftChoiceOpacity(Mathf.Clamp01(1f - percentage));
                                 if (currentChoiceType == ChoiceType.Photo)
                                 {
                                     pictureManager.UpdateHugDisplayOpacities(percentage, 0f);
@@ -119,6 +131,10 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                                 else if (currentChoiceType == ChoiceType.Question)
                                 {
                                     questions.UpdateAnswerDisplayOpacities(percentage, 0f);
+                                }
+                                else if (currentChoiceType == ChoiceType.Match)
+                                {
+                                    matches.UpdateHugDisplayOpacities(percentage, 0f);
                                 }
                             }
                             else
@@ -130,6 +146,10 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                                 else if (currentChoiceType == ChoiceType.Question)
                                 {
                                     questions.UpdateAnswerDisplayOpacities(0f, 0f);
+                                }
+                                else if (currentChoiceType == ChoiceType.Match)
+                                {
+                                    matches.UpdateHugDisplayOpacities(0f, 0f);
                                 }
                             }
                         }
@@ -149,9 +169,6 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                             bool choiceMade = false;
 
                             choiceMade = CheckChoiceThreshold(touch.position);
-                            //  storyUIController.UpdateRightChoiceOpacity(1f);
-                            //  storyUIController.UpdateLeftChoiceOpacity(1f);
-                            //   storyUIController.UpdateChoiceBackgroundOpacities(1f);
 
                             if (!choiceMade)
                             {
@@ -165,11 +182,12 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
                                     questions.UpdateSelectorPosition(0);
                                     questions.UpdateAnswerDisplayOpacities(0f, 0f);
                                 }
+                                else if (currentChoiceType == ChoiceType.Match)
+                                {
+                                    matches.UpdatePicturePosition(0);
+                                    matches.UpdateHugDisplayOpacities(0f, 0f);
+                                }
 
-                            }
-                            else
-                            {
-                                //pictureManager.UpdatePicturePosition(0);
                             }
                         }
                         break;
@@ -197,13 +215,21 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
             if (currentChoiceType == ChoiceType.Photo)
             {
                 pictureManager.SwipedRight();
+                SoundManager.Instance.PlayAcceptSound();
             }
             else if (currentChoiceType == ChoiceType.Question)
             {
                 questions.SwipedRight();
+                SoundManager.Instance.PlayConfirmSound();
             }
-                choiceMade = true;
-           // SoundManager.Instance.PlaySFX(completeSwipeAudioClip);
+            else if (currentChoiceType == ChoiceType.Match)
+            {
+                matches.SwipedRight();
+                SoundManager.Instance.PlayAcceptSound();
+            }
+
+            choiceMade = true;
+            
         }
         else if (endXPosition < startingXPosition - targetMovementNeeded)
         {
@@ -211,17 +237,24 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
             if (currentChoiceType == ChoiceType.Photo)
             {
                 pictureManager.SwipedLeft();
+                SoundManager.Instance.PlayDenySound();
             }
             else if (currentChoiceType == ChoiceType.Question)
             {
                 questions.SwipedLeft();
+                SoundManager.Instance.PlayConfirmSound();
+            }
+            else if (currentChoiceType == ChoiceType.Match)
+            {
+                matches.SwipedLeft();
+                SoundManager.Instance.PlayDenySound();
             }
             choiceMade = true;
-          //  SoundManager.Instance.PlaySFX(completeSwipeAudioClip);
+
         }
         else
         {
-              //  SoundManager.Instance.PlaySFX(cancelSwipeAudioClip);
+            SoundManager.Instance.PlayClickSound();
         }
 
         return choiceMade;
@@ -263,7 +296,7 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-       // SoundManager.Instance.PlaySFX(tapSwipeStartAudioClip);
+        SoundManager.Instance.PlayClickSound();
     }
     
 }

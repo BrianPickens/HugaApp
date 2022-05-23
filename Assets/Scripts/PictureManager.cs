@@ -64,6 +64,11 @@ public class PictureManager : MonoBehaviour
         rightFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, rightFeedbackRect.rect.height);
         feedbackAnimatorCallback.OnAnimatorComplete = FeedbackEnd;
 
+    }
+
+    public void StartSwiping()
+    {
+
         //randomize animal list
         for (int i = 0; i < allProfiles.Count; i++)
         {
@@ -72,10 +77,7 @@ public class PictureManager : MonoBehaviour
             allProfiles[i] = allProfiles[randomIndex];
             allProfiles[randomIndex] = tempProfile;
         }
-    }
 
-    public void StartSwiping()
-    {
         FillProfileInfo();
         gameObject.SetActive(true);
         inputBlocker.SetActive(true);
@@ -123,7 +125,7 @@ public class PictureManager : MonoBehaviour
         UpdatePicturePosition(0f);
 
         profileImage.sprite = allProfiles[currentProfileIndex].picture;
-        profileNameText.text = allProfiles[currentProfileIndex].name;
+        profileNameText.text = NamesAndLines.Instance.GetAnimalName(allProfiles[currentProfileIndex].animalType);
 
     }
 
@@ -175,12 +177,25 @@ public class PictureManager : MonoBehaviour
         playerStats.AddAnimalMatchAttempt(allProfiles[currentProfileIndex].animalType);
         currentProfileIndex++;
         feedbackAnimator.SetTrigger("Hug");
-        feedbackText.text = "Hug";
+        feedbackText.text = "Would Hug";
     }
 
     public void FeedbackEnd()
     {
         CheckForNextPicture();
+    }
+
+    public void RemoveProfile(Animals _animal)
+    {
+        Debug.LogError("REMOVED: " + _animal);
+        for (int i = 0; i < allProfiles.Count; i++)
+        {
+            if (allProfiles[i].animalType == _animal)
+            {
+                allProfiles.Remove(allProfiles[i]);
+                break;
+            }
+        }
     }
 
 }

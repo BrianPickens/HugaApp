@@ -51,6 +51,12 @@ public class Questionnaire : MonoBehaviour
 
     [SerializeField] private PlayerStats playerStats;
 
+    [SerializeField] private PictureManager pictureManager;
+
+    [SerializeField] private GameObject inkblotPicture;
+    [SerializeField] private GameObject drinkStandPicture;
+    [SerializeField] private GameObject chainsawPicture;
+
     public Action OnQuestionnaireEnded;
 
     private void Awake()
@@ -110,6 +116,27 @@ public class Questionnaire : MonoBehaviour
     {
         UpdateAnswerDisplayOpacities(0f, 0f);
         UpdateSelectorPosition(0f);
+
+        if (currentQuestionIndex == 13)
+        {
+            inkblotPicture.SetActive(true);
+        }
+        else
+        {
+            inkblotPicture.SetActive(false);
+        }
+
+        if (currentQuestionIndex == 18)
+        {
+            drinkStandPicture.SetActive(true);
+            chainsawPicture.SetActive(true);
+        }
+        else
+        {
+            drinkStandPicture.SetActive(false);
+            chainsawPicture.SetActive(false);
+        }
+
         questionText.text = allQuestions[currentQuestionIndex].question;
         answer1Text.text = allQuestions[currentQuestionIndex].answer1;
         answer2Text.text = allQuestions[currentQuestionIndex].answer2;
@@ -153,6 +180,7 @@ public class Questionnaire : MonoBehaviour
         UpdateAnswerDisplayOpacities(1f, 0f);
         inputBlocker.SetActive(true);
         playerStats.AddTallies(allQuestions[currentQuestionIndex].leftAnswerTallies);
+        CheckForDealBreaker(true);
         currentQuestionIndex++;
         CheckForNextQuestion();
         //play left swipe animation
@@ -163,9 +191,152 @@ public class Questionnaire : MonoBehaviour
         UpdateAnswerDisplayOpacities(0f, 1f);
         inputBlocker.SetActive(true);
         playerStats.AddTallies(allQuestions[currentQuestionIndex].rightAnswerTallies);
+        CheckForDealBreaker(false);
         currentQuestionIndex++;
         CheckForNextQuestion();
         //play right swipe animation
+    }
+
+    public void CheckForDealBreaker(bool _swipeLeft)
+    {
+        switch (currentQuestionIndex)
+        {
+            case 2:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Jaguar);
+                    playerStats.AddDealBreakerAnimal(Animals.Jaguar);
+                }
+                break;
+
+            case 3:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Spider);
+                    playerStats.AddDealBreakerAnimal(Animals.Spider);
+                }
+                break;
+
+            case 4:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Catfish);
+                    playerStats.AddDealBreakerAnimal(Animals.Catfish);
+                }
+                break;
+
+            case 5:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Skunk);
+                    playerStats.AddDealBreakerAnimal(Animals.Skunk);
+                }
+                break;
+
+            case 6:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Badger);
+                    playerStats.AddDealBreakerAnimal(Animals.Badger);
+                }
+                break;
+
+            case 7:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Hippo);
+                    playerStats.AddDealBreakerAnimal(Animals.Hippo);
+                }
+                break;
+
+            case 8:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Ants);
+                    playerStats.AddDealBreakerAnimal(Animals.Ants);
+                }
+                break;
+
+            case 9:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Bunny);
+                    playerStats.AddDealBreakerAnimal(Animals.Bunny);
+                }
+                break;
+
+            case 10:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Crocodile);
+                    playerStats.AddDealBreakerAnimal(Animals.Crocodile);
+                }
+                break;
+
+            case 11:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Dolphin);
+                    playerStats.AddDealBreakerAnimal(Animals.Dolphin);
+                }
+                break;
+
+            case 12:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Snake);
+                    playerStats.AddDealBreakerAnimal(Animals.Snake);
+                }
+                break;
+
+            case 13:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Octopus);
+                    playerStats.AddDealBreakerAnimal(Animals.Octopus);
+                }
+                break;
+
+            case 14:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Dog);
+                    playerStats.AddDealBreakerAnimal(Animals.Dog);
+                }
+                break;
+
+            case 16:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Gorilla);
+                    playerStats.AddDealBreakerAnimal(Animals.Gorilla);
+                }
+                break;
+
+            case 17:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Shark);
+                    playerStats.AddDealBreakerAnimal(Animals.Shark);
+                }
+                break;
+
+            case 18:
+                if (_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Squirrel);
+                    playerStats.AddDealBreakerAnimal(Animals.Squirrel);
+                }
+                break;
+
+            case 19:
+                if (!_swipeLeft)
+                {
+                    pictureManager.RemoveProfile(Animals.Krill);
+                    playerStats.AddDealBreakerAnimal(Animals.Krill);
+                }
+                break;
+        }
     }
 
 
