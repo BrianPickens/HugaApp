@@ -57,6 +57,8 @@ public class Questionnaire : MonoBehaviour
     [SerializeField] private GameObject drinkStandPicture;
     [SerializeField] private GameObject chainsawPicture;
 
+    private float startingTextBoxWidth;
+
     public Action OnQuestionnaireEnded;
 
     private void Awake()
@@ -72,6 +74,7 @@ public class Questionnaire : MonoBehaviour
         rightFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, rightFeedbackRect.rect.height);
         leftAnswerRect.sizeDelta = new Vector2(safeAreaWidth / 2f, leftAnswerRect.rect.height);
         rightAnswerRect.sizeDelta = new Vector2(safeAreaWidth / 2f, rightAnswerRect.rect.height);
+        startingTextBoxWidth = leftAnswerRect.rect.width;
     }
 
     public void StartQuestionnaire()
@@ -117,6 +120,9 @@ public class Questionnaire : MonoBehaviour
         UpdateAnswerDisplayOpacities(0f, 0f);
         UpdateSelectorPosition(0f);
 
+        leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth, leftAnswerRect.rect.height);
+        rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth, rightAnswerRect.rect.height);
+
         if (currentQuestionIndex == 13)
         {
             inkblotPicture.SetActive(true);
@@ -156,17 +162,31 @@ public class Questionnaire : MonoBehaviour
 
     public void UpdateSelectorPosition(float _difference)
     {
+
+
+
         if (_difference > 0)
         {
             _difference = Mathf.Clamp(_difference, 0, maxSwipeDistance);
+
+            leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), leftAnswerRect.rect.height);
+            rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), rightAnswerRect.rect.height);
+
         }
 
         if (_difference < 0)
         {
             _difference = Mathf.Clamp(_difference, -maxSwipeDistance, 0);
+
+            leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), leftAnswerRect.rect.height);
+            rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), rightAnswerRect.rect.height);
         }
 
+
+
         selectorRect.anchoredPosition = new Vector2(startingSelectorXPosition + _difference, selectorRect.anchoredPosition.y);
+        
+
     }
 
     public void UpdateAnswerDisplayOpacities(float _left, float _right)
@@ -177,24 +197,23 @@ public class Questionnaire : MonoBehaviour
 
     public void SwipedLeft()
     {
-        UpdateAnswerDisplayOpacities(1f, 0f);
-        inputBlocker.SetActive(true);
-        playerStats.AddTallies(allQuestions[currentQuestionIndex].leftAnswerTallies);
-        CheckForDealBreaker(true);
-        currentQuestionIndex++;
-        CheckForNextQuestion();
-        //play left swipe animation
-    }
-
-    public void SwipedRight()
-    {
         UpdateAnswerDisplayOpacities(0f, 1f);
         inputBlocker.SetActive(true);
         playerStats.AddTallies(allQuestions[currentQuestionIndex].rightAnswerTallies);
         CheckForDealBreaker(false);
         currentQuestionIndex++;
         CheckForNextQuestion();
-        //play right swipe animation
+    }
+
+    public void SwipedRight()
+    {
+        UpdateAnswerDisplayOpacities(1f, 0f);
+        inputBlocker.SetActive(true);
+        playerStats.AddTallies(allQuestions[currentQuestionIndex].leftAnswerTallies);
+        CheckForDealBreaker(true);
+        currentQuestionIndex++;
+        CheckForNextQuestion();
+
     }
 
     public void CheckForDealBreaker(bool _swipeLeft)

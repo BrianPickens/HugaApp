@@ -29,17 +29,14 @@ public class PictureManager : MonoBehaviour
     [SerializeField] private GameObject inputBlocker;
     [SerializeField] private Animator profileAnimator;
 
-    [SerializeField] private CanvasGroup leftHugImage;
-    [SerializeField] private CanvasGroup rightHugImage;
-
     [SerializeField] private InputDetection inputDetection;
 
     [SerializeField] private float maxSwipeDistance;
 
     [SerializeField] private SafeArea safeArea;
 
-    [SerializeField] private RectTransform leftFeedbackRect;
-    [SerializeField] private RectTransform rightFeedbackRect;
+   // [SerializeField] private RectTransform leftFeedbackRect;
+   // [SerializeField] private RectTransform rightFeedbackRect;
     [SerializeField] private CanvasGroup leftFeedbackSide;
     [SerializeField] private CanvasGroup rightFeedbackSide;
 
@@ -48,6 +45,13 @@ public class PictureManager : MonoBehaviour
     [SerializeField] private AnimatorCallback feedbackAnimatorCallback;
 
     [SerializeField] private PlayerStats playerStats;
+
+    [SerializeField] private CanvasGroup leftArrowCanvas;
+    [SerializeField] private CanvasGroup rightArrowCanvas;
+    [SerializeField] private CanvasGroup selectorCanvas;
+
+    [SerializeField] private CanvasGroup noHugCanvas;
+    [SerializeField] private CanvasGroup hugCanvas;
 
     public Action OnSwipingEnd;
 
@@ -60,8 +64,8 @@ public class PictureManager : MonoBehaviour
     private void Start()
     {
         float safeAreaWidth = safeArea.GetSafeAreaWidth();
-        leftFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, leftFeedbackRect.rect.height);
-        rightFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, rightFeedbackRect.rect.height);
+       // leftFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, leftFeedbackRect.rect.height);
+       // rightFeedbackRect.sizeDelta = new Vector2(safeAreaWidth / 2f, rightFeedbackRect.rect.height);
         feedbackAnimatorCallback.OnAnimatorComplete = FeedbackEnd;
 
     }
@@ -153,10 +157,27 @@ public class PictureManager : MonoBehaviour
 
     public void UpdateHugDisplayOpacities(float _left, float _right)
     {
-        leftHugImage.alpha = _left;
-        rightHugImage.alpha = _right;
         leftFeedbackSide.alpha = _left;
         rightFeedbackSide.alpha = _right;
+
+        noHugCanvas.alpha = 1f - _right;
+        hugCanvas.alpha = 1f - _left;
+
+
+        float newAlpha = 0f;
+        if (_left >= _right)
+        {
+            newAlpha = _left;
+        }
+        else
+        {
+            newAlpha = _right;
+        }
+
+        leftArrowCanvas.alpha = 1f - newAlpha;
+        rightArrowCanvas.alpha = 1f - newAlpha;
+        selectorCanvas.alpha = 1f - newAlpha;
+
 
     }
 

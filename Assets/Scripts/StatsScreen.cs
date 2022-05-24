@@ -29,12 +29,12 @@ public class StatsScreen : MonoBehaviour
 
     private void FillStats()
     {
-        predatorStat.text = "Predator Score: " + playerStats.preditorTally.ToString();
-        preyStat.text = "Prey Score: " + playerStats.preyTally.ToString();
-        landStat.text = "Land Score: " + playerStats.landTally.ToString();
-        waterStat.text = "Water Score: " +playerStats.waterTally.ToString();
-        mammalStat.text = "Mammal Score: " + playerStats.mammalTally.ToString();
-        notMammalStat.text = "Not Mammal Score: " + playerStats.notMammalTally.ToString();
+       // predatorStat.text = "Predator Score: " + playerStats.preditorTally.ToString();
+       // preyStat.text = "Prey Score: " + playerStats.preyTally.ToString();
+       // landStat.text = "Land Score: " + playerStats.landTally.ToString();
+       // waterStat.text = "Water Score: " +playerStats.waterTally.ToString();
+        //mammalStat.text = "Mammal Score: " + playerStats.mammalTally.ToString();
+       // notMammalStat.text = "Not Mammal Score: " + playerStats.notMammalTally.ToString();
 
         numMatchAttempts.text = "Hug Attempts: " + playerStats.GetNumMatchAttempts().ToString();
         numMatches.text = "Hug Matches: " + playerStats.GetMatches().Count.ToString() + "/25";
@@ -44,16 +44,38 @@ public class StatsScreen : MonoBehaviour
         List<PlayerStats.AnimalCompatibility> animalCompatibilities = new List<PlayerStats.AnimalCompatibility>();
         animalCompatibilities = playerStats.GetCompatiblityList();
 
-        for (int i = 0; i < animalCompatibilities.Count; i++)
+        for (int i = 0; i < 5; i++)
         {
             string newText = (i + 1).ToString() + ". " + NamesAndLines.Instance.GetAnimalName(animalCompatibilities[i].animalType).ToString();
             if (animalCompatibilities[i].dealBreaker)
             {
                 newText += " " + "(DB)";
             }
-            
+
             compatibilityText[i].text = newText;
         }
+
+        for (int i = 20; i < animalCompatibilities.Count; i++)
+        {
+            string newText = (i + 1).ToString() + ". " + NamesAndLines.Instance.GetAnimalName(animalCompatibilities[i].animalType).ToString();
+            if (animalCompatibilities[i].dealBreaker)
+            {
+                newText += " " + "(DB)";
+            }
+
+            compatibilityText[i].text = newText;
+        }
+
+        //for (int i = 0; i < animalCompatibilities.Count; i++)
+        //{
+        //    string newText = (i + 1).ToString() + ". " + NamesAndLines.Instance.GetAnimalName(animalCompatibilities[i].animalType).ToString();
+        //    if (animalCompatibilities[i].dealBreaker)
+        //    {
+        //        newText += " " + "(DB)";
+        //    }
+            
+        //    compatibilityText[i].text = newText;
+        //}
 
     }
 }

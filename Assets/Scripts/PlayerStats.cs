@@ -64,6 +64,8 @@ public class PlayerStats : MonoBehaviour
     {
         for (int i = 0; i < categoryTallies.Count; i++)
         {
+            Debug.LogError("Stat: " + categoryTallies[i]);
+
             switch (categoryTallies[i])
             {
                 case StatCategories.Preditor:

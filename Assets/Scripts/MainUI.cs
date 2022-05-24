@@ -72,8 +72,11 @@ public class MainUI : MonoBehaviour
         introText6bAnimatorCallback.OnAnimatorComplete = EndIntroText6b;
 
         introText1.SetActive(true);
+        //EndIntroText3();
         //EndIntroText4();
-       // EndIntroText5();
+        //SwipingEnd();
+        //EndIntroText5();
+        //EndIntroText6b();
     }
 
     public void ClickThroughIntroText1()
