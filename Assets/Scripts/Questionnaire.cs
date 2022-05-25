@@ -156,7 +156,7 @@ public class Questionnaire : MonoBehaviour
 
     public void QuestionnaireEnded()
     {
-        playerStats.DisplayStats();
+        //playerStats.DisplayStats();
         OnQuestionnaireEnded?.Invoke();
     }
 
@@ -165,7 +165,7 @@ public class Questionnaire : MonoBehaviour
 
 
 
-        if (_difference > 0)
+        if (_difference >= 0)
         {
             _difference = Mathf.Clamp(_difference, 0, maxSwipeDistance);
 
@@ -173,14 +173,15 @@ public class Questionnaire : MonoBehaviour
             rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), rightAnswerRect.rect.height);
 
         }
-
-        if (_difference < 0)
+        else if (_difference < 0)
         {
             _difference = Mathf.Clamp(_difference, -maxSwipeDistance, 0);
 
             leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), leftAnswerRect.rect.height);
             rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), rightAnswerRect.rect.height);
         }
+
+
 
 
 

@@ -64,7 +64,7 @@ public class PlayerStats : MonoBehaviour
     {
         for (int i = 0; i < categoryTallies.Count; i++)
         {
-            Debug.LogError("Stat: " + categoryTallies[i]);
+            //Debug.LogError("Stat: " + categoryTallies[i]);
 
             switch (categoryTallies[i])
             {
@@ -223,6 +223,11 @@ public class PlayerStats : MonoBehaviour
             }
 
         }
+    }
+
+    public void AddAnimalMatch(Animals _type)
+    {
+        animalMatches.Add(_type);
     }
 
     public void AddToCompatibiltyList(Animals _animal, int _score, bool _dealbreaker)

@@ -122,6 +122,7 @@ public class MatchManager : MonoBehaviour
             {
                 if (matchAttempts[randomIndex] == allProfiles[i].animalType)
                 {
+                    playerStats.AddAnimalMatch(matchAttempts[randomIndex]);
                     allMatches.Add(allProfiles[i]);
                 }
             }
