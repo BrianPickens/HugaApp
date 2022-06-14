@@ -30,6 +30,9 @@ public class Questionnaire : MonoBehaviour
     [SerializeField] private RectTransform leftAnswerRect;
     [SerializeField] private RectTransform rightAnswerRect;
 
+    [SerializeField] private Image leftSideBackground;
+    [SerializeField] private Image rightSideBackground;
+
     [SerializeField] private GameObject inputBlocker;
 
     [SerializeField] private Animator questionnaireAnimator;
@@ -56,6 +59,19 @@ public class Questionnaire : MonoBehaviour
     [SerializeField] private GameObject inkblotPicture;
     [SerializeField] private GameObject drinkStandPicture;
     [SerializeField] private GameObject chainsawPicture;
+
+    [SerializeField] private Image drinkStandImage;
+    [SerializeField] private Image chainsawImage;
+
+
+    [SerializeField] private Color redColor;
+    [SerializeField] private Color blueColor;
+
+    [SerializeField] private Color textColor;
+    [SerializeField] private Color transparentTextColor;
+
+    [SerializeField] private Color imageColorWhite;
+    [SerializeField] private Color imageColorTransparent;
 
     private float startingTextBoxWidth;
 
@@ -123,6 +139,12 @@ public class Questionnaire : MonoBehaviour
         leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth, leftAnswerRect.rect.height);
         rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth, rightAnswerRect.rect.height);
 
+        leftSideBackground.color = redColor;
+        rightSideBackground.color = blueColor;
+
+        answer1Text.color = textColor;
+        answer2Text.color = textColor;
+
         if (currentQuestionIndex == 13)
         {
             inkblotPicture.SetActive(true);
@@ -136,6 +158,10 @@ public class Questionnaire : MonoBehaviour
         {
             drinkStandPicture.SetActive(true);
             chainsawPicture.SetActive(true);
+
+            drinkStandImage.color = imageColorWhite;
+            chainsawImage.color = imageColorWhite;
+
         }
         else
         {
@@ -169,16 +195,61 @@ public class Questionnaire : MonoBehaviour
         {
             _difference = Mathf.Clamp(_difference, 0, maxSwipeDistance);
 
-            leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), leftAnswerRect.rect.height);
-            rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), rightAnswerRect.rect.height);
+            rightSideBackground.color = blueColor;
+            answer2Text.color = textColor;
+
+
+            float t = _difference / maxSwipeDistance;
+
+            Color newColor = Color.Lerp(redColor, blueColor, t);
+
+            leftSideBackground.color = newColor;
+
+            Color newTextColor = Color.Lerp(textColor, transparentTextColor, t);
+
+            answer1Text.color = newTextColor;
+
+            if (currentQuestionIndex == 18)
+            {
+                chainsawImage.color = imageColorWhite;
+
+                Color imageColor = Color.Lerp(imageColorWhite, imageColorTransparent, t);
+                drinkStandImage.color = imageColor;
+
+            }
+
+                //leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), leftAnswerRect.rect.height);
+                // rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), rightAnswerRect.rect.height);
 
         }
         else if (_difference < 0)
         {
             _difference = Mathf.Clamp(_difference, -maxSwipeDistance, 0);
 
-            leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), leftAnswerRect.rect.height);
-            rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), rightAnswerRect.rect.height);
+            leftSideBackground.color = redColor;
+            answer1Text.color = textColor;
+
+
+            float t = Mathf.Abs(_difference / maxSwipeDistance);
+
+            Color newColor = Color.Lerp(blueColor, redColor, t);
+
+            rightSideBackground.color = newColor;
+
+            Color newTextColor = Color.Lerp(textColor, transparentTextColor, t);
+
+            answer2Text.color = newTextColor;
+
+            if (currentQuestionIndex == 18)
+            {
+                drinkStandImage.color = imageColorWhite;
+
+                Color imageColor = Color.Lerp(imageColorWhite, imageColorTransparent, t);
+                chainsawImage.color = imageColor;
+            }
+
+            // leftAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth - Mathf.Abs(_difference), leftAnswerRect.rect.height);
+            //rightAnswerRect.sizeDelta = new Vector2(startingTextBoxWidth + Mathf.Abs(_difference), rightAnswerRect.rect.height);
         }
 
 
@@ -200,8 +271,8 @@ public class Questionnaire : MonoBehaviour
     {
         UpdateAnswerDisplayOpacities(0f, 1f);
         inputBlocker.SetActive(true);
-        playerStats.AddTallies(allQuestions[currentQuestionIndex].rightAnswerTallies);
-        CheckForDealBreaker(false);
+        playerStats.AddTallies(allQuestions[currentQuestionIndex].leftAnswerTallies);
+        CheckForDealBreaker(true);
         currentQuestionIndex++;
         CheckForNextQuestion();
     }
@@ -210,8 +281,8 @@ public class Questionnaire : MonoBehaviour
     {
         UpdateAnswerDisplayOpacities(1f, 0f);
         inputBlocker.SetActive(true);
-        playerStats.AddTallies(allQuestions[currentQuestionIndex].leftAnswerTallies);
-        CheckForDealBreaker(true);
+        playerStats.AddTallies(allQuestions[currentQuestionIndex].rightAnswerTallies);
+        CheckForDealBreaker(false);
         currentQuestionIndex++;
         CheckForNextQuestion();
 
