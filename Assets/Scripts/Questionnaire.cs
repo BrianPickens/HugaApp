@@ -39,6 +39,7 @@ public class Questionnaire : MonoBehaviour
 
     [SerializeField] private RectTransform selectorRect;
     private float startingSelectorXPosition;
+    [SerializeField] private Image selectorImage;
 
     [SerializeField] private float maxSwipeDistance;
 
@@ -199,7 +200,11 @@ public class Questionnaire : MonoBehaviour
             answer2Text.color = textColor;
 
 
-            float t = _difference / maxSwipeDistance;
+            float t = _difference / maxSwipeDistance * 3f;
+
+            Color newSelectorColor = Color.Lerp(imageColorWhite, imageColorTransparent, t);
+
+            selectorImage.color = newSelectorColor;
 
             Color newColor = Color.Lerp(redColor, blueColor, t);
 
@@ -230,7 +235,11 @@ public class Questionnaire : MonoBehaviour
             answer1Text.color = textColor;
 
 
-            float t = Mathf.Abs(_difference / maxSwipeDistance);
+            float t = Mathf.Abs(_difference / maxSwipeDistance * 3f);
+
+            Color newSelectorColor = Color.Lerp(imageColorWhite, imageColorTransparent, t);
+
+            selectorImage.color = newSelectorColor;
 
             Color newColor = Color.Lerp(blueColor, redColor, t);
 

@@ -1050,7 +1050,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -1614,7 +1614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -4643,7 +4643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -5545,7 +5545,7 @@ MonoBehaviour:
   inputBlocker: {fileID: 686814663}
   profileAnimator: {fileID: 607225367}
   inputDetection: {fileID: 1217035044}
-  maxSwipeDistance: 200
+  maxSwipeDistance: 250
   safeArea: {fileID: 224978682}
   leftFeedbackSide: {fileID: 185949030}
   rightFeedbackSide: {fileID: 1670690892}
@@ -6538,7 +6538,7 @@ MonoBehaviour:
   inputBlocker: {fileID: 686814663}
   profileAnimator: {fileID: 729524243}
   inputDetection: {fileID: 1217035044}
-  maxSwipeDistance: 200
+  maxSwipeDistance: 250
   safeArea: {fileID: 224978682}
   leftFeedbackSide: {fileID: 1098638875}
   rightFeedbackSide: {fileID: 1507310961}
@@ -7295,7 +7295,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -7862,7 +7862,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -9759,7 +9759,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCanvasRect: {fileID: 528072818}
-  HorizontalSelectPercentageThreshold: 0.3
+  HorizontalSelectPercentageQuestion: 0.15
+  HorizontalSelectPercentagePhoto: 0.05
+  HorizontalSelectionPercentageHug: 0.05
   pictureManager: {fileID: 607225368}
   questions: {fileID: 2102937679}
   matches: {fileID: 729524240}
@@ -10104,11 +10106,11 @@ RectTransform:
   m_Father: {fileID: 1476698092}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -907.7296, y: -859.3352}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 900, y: -450}
   m_SizeDelta: {x: 855, y: 575}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1289697128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11550,11 +11552,11 @@ RectTransform:
   m_Father: {fileID: 1994916704}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 902.04346, y: -859.3352}
-  m_SizeDelta: {x: 518.715, y: 518.715}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -900, y: -450}
+  m_SizeDelta: {x: 518.7151, y: 518.715}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1492066061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15435,7 +15437,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0
@@ -16020,6 +16022,7 @@ MonoBehaviour:
   inputBlocker: {fileID: 686814663}
   questionnaireAnimator: {fileID: 2102937676}
   selectorRect: {fileID: 216616622}
+  selectorImage: {fileID: 5632932}
   maxSwipeDistance: 250
   leftAnswerCanvasGroup: {fileID: 382249375}
   rightAnswerCanvasGroup: {fileID: 1695116069}
@@ -16392,7 +16395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tap to
+  m_text: 'Click to
 
     Continue'
   m_isRightToLeft: 0

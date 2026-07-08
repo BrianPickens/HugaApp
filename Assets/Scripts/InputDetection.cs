@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public enum ChoiceType { Question, Photo, Match }
 
-public class InputDetection : MonoBehaviour, IPointerDownHandler
+public class InputDetection : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
 
     protected enum PositionCheck { Height, Width }
@@ -19,7 +20,9 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] protected RectTransform mainCanvasRect;
 
-    [SerializeField] [Range(0.1f, 0.9f)] protected float HorizontalSelectPercentageThreshold;
+    [SerializeField] [Range(0f, 0.9f)] protected float HorizontalSelectPercentageQuestion;
+    [SerializeField] [Range(0f, 0.9f)] protected float HorizontalSelectPercentagePhoto;
+    [SerializeField] [Range(0f, 0.9f)] protected float HorizontalSelectionPercentageHug;
 
     [SerializeField] private PictureManager pictureManager;
     [SerializeField] private Questionnaire questions;
@@ -60,140 +63,140 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
 
     public virtual void Update()
     {
-        if (allowChoice)
-        {
+        //if (allowChoice)
+        //{
 
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        startedTouch = true;
-                        startingXPosition = ConvertMousePositionToCanvasPosition(touch.position.x, PositionCheck.Width);
-                        startingYPosition = ConvertMousePositionToCanvasPosition(touch.position.y, PositionCheck.Height);
-                        break;
+        //    if (Input.touchCount > 0)
+        //    {
+        //        Touch touch = Input.GetTouch(0);
+        //        switch (touch.phase)
+        //        {
+        //            case TouchPhase.Began:
+        //                startedTouch = true;
+        //                startingXPosition = ConvertMousePositionToCanvasPosition(touch.position.x, PositionCheck.Width);
+        //                startingYPosition = ConvertMousePositionToCanvasPosition(touch.position.y, PositionCheck.Height);
+        //                break;
 
-                    case TouchPhase.Moved:
-                        if (allowChoice)
-                        {
+        //            case TouchPhase.Moved:
+        //                if (allowChoice)
+        //                {
 
-                            if (!startedTouch)
-                            {
-                                return;
-                            }
+        //                    if (!startedTouch)
+        //                    {
+        //                        return;
+        //                    }
 
-                            float canvasXPosition = ConvertMousePositionToCanvasPosition(touch.position.x, PositionCheck.Width);
-                            float canvasWidth = mainCanvasRect.rect.width;
+        //                    float canvasXPosition = ConvertMousePositionToCanvasPosition(touch.position.x, PositionCheck.Width);
+        //                    float canvasWidth = mainCanvasRect.rect.width;
 
-                            if (currentChoiceType == ChoiceType.Photo)
-                            {
-                                pictureManager.UpdatePicturePosition(canvasXPosition - startingXPosition);
-                            }
-                            else if (currentChoiceType == ChoiceType.Question)
-                            {
-                                questions.UpdateSelectorPosition(canvasXPosition - startingXPosition);
-                            }
-                            else if (currentChoiceType == ChoiceType.Match)
-                            {
-                                matches.UpdatePicturePosition(canvasXPosition - startingXPosition);
-                            }
+        //                    if (currentChoiceType == ChoiceType.Photo)
+        //                    {
+        //                        pictureManager.UpdatePicturePosition(canvasXPosition - startingXPosition);
+        //                    }
+        //                    else if (currentChoiceType == ChoiceType.Question)
+        //                    {
+        //                        questions.UpdateSelectorPosition(canvasXPosition - startingXPosition);
+        //                    }
+        //                    else if (currentChoiceType == ChoiceType.Match)
+        //                    {
+        //                        matches.UpdatePicturePosition(canvasXPosition - startingXPosition);
+        //                    }
 
-                            float targetMovementNeeded = 0f;
+        //                    float targetMovementNeeded = 0f;
 
-                            targetMovementNeeded = canvasWidth * HorizontalSelectPercentageThreshold;
+        //                    targetMovementNeeded = canvasWidth * HorizontalSelectPercentageThreshold;
 
-                            float backgroundPercentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+        //                    float backgroundPercentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
 
-                            if (canvasXPosition > startingXPosition)
-                            {
-                                float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
-                                if (currentChoiceType == ChoiceType.Photo)
-                                {
-                                    pictureManager.UpdateHugDisplayOpacities(0f, percentage);
-                                }
-                                else if (currentChoiceType == ChoiceType.Question)
-                                {
-                                    questions.UpdateAnswerDisplayOpacities(0f, percentage);
-                                }
-                                else if (currentChoiceType == ChoiceType.Match)
-                                {
-                                    matches.UpdateHugDisplayOpacities(0f, percentage);
-                                }
-                            }
-                            else if (canvasXPosition < startingXPosition)
-                            {
-                                float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
-                                if (currentChoiceType == ChoiceType.Photo)
-                                {
-                                    pictureManager.UpdateHugDisplayOpacities(percentage, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Question)
-                                {
-                                    questions.UpdateAnswerDisplayOpacities(percentage, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Match)
-                                {
-                                    matches.UpdateHugDisplayOpacities(percentage, 0f);
-                                }
-                            }
-                            else
-                            {
-                                if (currentChoiceType == ChoiceType.Photo)
-                                {
-                                    pictureManager.UpdateHugDisplayOpacities(0f, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Question)
-                                {
-                                    questions.UpdateAnswerDisplayOpacities(0f, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Match)
-                                {
-                                    matches.UpdateHugDisplayOpacities(0f, 0f);
-                                }
-                            }
-                        }
-                        break;
+        //                    if (canvasXPosition > startingXPosition)
+        //                    {
+        //                        float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+        //                        if (currentChoiceType == ChoiceType.Photo)
+        //                        {
+        //                            pictureManager.UpdateHugDisplayOpacities(0f, percentage);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Question)
+        //                        {
+        //                            questions.UpdateAnswerDisplayOpacities(0f, percentage);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Match)
+        //                        {
+        //                            matches.UpdateHugDisplayOpacities(0f, percentage);
+        //                        }
+        //                    }
+        //                    else if (canvasXPosition < startingXPosition)
+        //                    {
+        //                        float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+        //                        if (currentChoiceType == ChoiceType.Photo)
+        //                        {
+        //                            pictureManager.UpdateHugDisplayOpacities(percentage, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Question)
+        //                        {
+        //                            questions.UpdateAnswerDisplayOpacities(percentage, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Match)
+        //                        {
+        //                            matches.UpdateHugDisplayOpacities(percentage, 0f);
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (currentChoiceType == ChoiceType.Photo)
+        //                        {
+        //                            pictureManager.UpdateHugDisplayOpacities(0f, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Question)
+        //                        {
+        //                            questions.UpdateAnswerDisplayOpacities(0f, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Match)
+        //                        {
+        //                            matches.UpdateHugDisplayOpacities(0f, 0f);
+        //                        }
+        //                    }
+        //                }
+        //                break;
 
-                    case TouchPhase.Ended:
+        //            case TouchPhase.Ended:
 
-                        if (allowChoice)
-                        {
-                            if (!startedTouch)
-                            {
-                                return;
-                            }
+        //                if (allowChoice)
+        //                {
+        //                    if (!startedTouch)
+        //                    {
+        //                        return;
+        //                    }
 
-                            startedTouch = false;
+        //                    startedTouch = false;
 
-                            bool choiceMade = false;
+        //                    bool choiceMade = false;
 
-                            choiceMade = CheckChoiceThreshold(touch.position);
+        //                    choiceMade = CheckChoiceThreshold(touch.position);
 
-                            if (!choiceMade)
-                            {
-                                if (currentChoiceType == ChoiceType.Photo)
-                                {
-                                    pictureManager.UpdatePicturePosition(0);
-                                    pictureManager.UpdateHugDisplayOpacities(0f, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Question)
-                                {
-                                    questions.UpdateSelectorPosition(0);
-                                    questions.UpdateAnswerDisplayOpacities(0f, 0f);
-                                }
-                                else if (currentChoiceType == ChoiceType.Match)
-                                {
-                                    matches.UpdatePicturePosition(0);
-                                    matches.UpdateHugDisplayOpacities(0f, 0f);
-                                }
+        //                    if (!choiceMade)
+        //                    {
+        //                        if (currentChoiceType == ChoiceType.Photo)
+        //                        {
+        //                            pictureManager.UpdatePicturePosition(0);
+        //                            pictureManager.UpdateHugDisplayOpacities(0f, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Question)
+        //                        {
+        //                            questions.UpdateSelectorPosition(0);
+        //                            questions.UpdateAnswerDisplayOpacities(0f, 0f);
+        //                        }
+        //                        else if (currentChoiceType == ChoiceType.Match)
+        //                        {
+        //                            matches.UpdatePicturePosition(0);
+        //                            matches.UpdateHugDisplayOpacities(0f, 0f);
+        //                        }
 
-                            }
-                        }
-                        break;
-                }
-            }
-        }
+        //                    }
+        //                }
+        //                break;
+        //        }
+        //    }
+        //}
     }
 
     protected virtual bool CheckChoiceThreshold(Vector2 _currentPosition)
@@ -207,7 +210,20 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
 
         bool choiceMade = false;
 
-        targetMovementNeeded = canvasWidth * HorizontalSelectPercentageThreshold;
+
+        if (currentChoiceType == ChoiceType.Photo)
+        {
+            targetMovementNeeded = canvasWidth * HorizontalSelectPercentagePhoto;
+        }
+        else if (currentChoiceType == ChoiceType.Question)
+        {
+            targetMovementNeeded = canvasWidth * HorizontalSelectPercentageQuestion;
+        }
+        else if (currentChoiceType == ChoiceType.Match)
+        {
+            targetMovementNeeded = canvasWidth * HorizontalSelectionPercentageHug;
+        }
+
 
         if (endXPosition > startingXPosition + targetMovementNeeded)
         {
@@ -297,6 +313,138 @@ public class InputDetection : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         SoundManager.Instance.PlayClickSound();
+        startingXPosition = ConvertMousePositionToCanvasPosition(Input.mousePosition.x, PositionCheck.Width);
+        startingYPosition = ConvertMousePositionToCanvasPosition(Input.mousePosition.y, PositionCheck.Height);
+        startedTouch = true;
     }
-    
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (allowChoice)
+        {
+
+            if (!startedTouch)
+            {
+                return;
+            }
+
+            float canvasXPosition = ConvertMousePositionToCanvasPosition(Input.mousePosition.x, PositionCheck.Width);
+            float canvasWidth = mainCanvasRect.rect.width;
+
+            if (currentChoiceType == ChoiceType.Photo)
+            {
+                pictureManager.UpdatePicturePosition(canvasXPosition - startingXPosition);
+            }
+            else if (currentChoiceType == ChoiceType.Question)
+            {
+                questions.UpdateSelectorPosition(canvasXPosition - startingXPosition);
+            }
+            else if (currentChoiceType == ChoiceType.Match)
+            {
+                matches.UpdatePicturePosition(canvasXPosition - startingXPosition);
+            }
+
+            float targetMovementNeeded = 0f;
+
+            if (currentChoiceType == ChoiceType.Photo)
+            {
+                targetMovementNeeded = canvasWidth * HorizontalSelectPercentagePhoto;
+            }
+            else if (currentChoiceType == ChoiceType.Question)
+            {
+                targetMovementNeeded = canvasWidth * HorizontalSelectPercentageQuestion;
+            }
+            else if (currentChoiceType == ChoiceType.Match)
+            {
+                targetMovementNeeded = canvasWidth * HorizontalSelectionPercentageHug;
+            }
+
+            float backgroundPercentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+
+            if (canvasXPosition > startingXPosition)
+            {
+                float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+                if (currentChoiceType == ChoiceType.Photo)
+                {
+                    pictureManager.UpdateHugDisplayOpacities(0f, percentage);
+                }
+                else if (currentChoiceType == ChoiceType.Question)
+                {
+                    questions.UpdateAnswerDisplayOpacities(0f, percentage);
+                }
+                else if (currentChoiceType == ChoiceType.Match)
+                {
+                    matches.UpdateHugDisplayOpacities(0f, percentage);
+                }
+            }
+            else if (canvasXPosition < startingXPosition)
+            {
+                float percentage = Mathf.Abs((canvasXPosition - startingXPosition) / targetMovementNeeded);
+                if (currentChoiceType == ChoiceType.Photo)
+                {
+                    pictureManager.UpdateHugDisplayOpacities(percentage, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Question)
+                {
+                    questions.UpdateAnswerDisplayOpacities(percentage, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Match)
+                {
+                    matches.UpdateHugDisplayOpacities(percentage, 0f);
+                }
+            }
+            else
+            {
+                if (currentChoiceType == ChoiceType.Photo)
+                {
+                    pictureManager.UpdateHugDisplayOpacities(0f, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Question)
+                {
+                    questions.UpdateAnswerDisplayOpacities(0f, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Match)
+                {
+                    matches.UpdateHugDisplayOpacities(0f, 0f);
+                }
+            }
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (allowChoice)
+        {
+            if (!startedTouch)
+            {
+                return;
+            }
+
+            startedTouch = false;
+
+            bool choiceMade = false;
+
+            choiceMade = CheckChoiceThreshold(Input.mousePosition);
+
+            if (!choiceMade)
+            {
+                if (currentChoiceType == ChoiceType.Photo)
+                {
+                    pictureManager.UpdatePicturePosition(0);
+                    pictureManager.UpdateHugDisplayOpacities(0f, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Question)
+                {
+                    questions.UpdateSelectorPosition(0);
+                    questions.UpdateAnswerDisplayOpacities(0f, 0f);
+                }
+                else if (currentChoiceType == ChoiceType.Match)
+                {
+                    matches.UpdatePicturePosition(0);
+                    matches.UpdateHugDisplayOpacities(0f, 0f);
+                }
+
+            }
+        }
+    }
 }
